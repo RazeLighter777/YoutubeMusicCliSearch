@@ -17,6 +17,7 @@ public class App
         Scanner sc = new Scanner(System.in);
         String query = sc.nextLine();
         ytCon.getSearchResult(query);
+        sc.close();
     }
     public static void main( String[] args )
     {

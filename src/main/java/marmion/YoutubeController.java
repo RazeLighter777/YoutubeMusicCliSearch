@@ -23,9 +23,10 @@ public class YoutubeController {
 
     public void removeNonMusic() {
         try {
-            Process p =  rt.exec("rm music/*");
+            Process p =  rt.exec("rm -rf music/");
+            Process q = rt.exec("mkdir music");
             BufferedReader in =
-            new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            new BufferedReader(new InputStreamReader(p.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 System.out.println(inputLine);
@@ -59,8 +60,16 @@ public class YoutubeController {
         }
         for (String s : results) {
             try {
-                rt.exec("mpv " + "music/" + s);
-            } catch (IOException e) {
+                Process p = rt.exec("mpv " + "music/" + s);
+                BufferedReader in =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    System.out.println(inputLine);
+                }
+                in.close();
+                p.waitFor();
+            } catch (IOException | InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
